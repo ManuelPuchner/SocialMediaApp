@@ -1,5 +1,8 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import { connectToDatabase } from "lib/mongodb";
 
-export default function handler(req, res) {
-  res.status(200).json({ name: 'John Doe' })
-}
+const handler = async (req, res) => {
+  let { db } = await connectToDatabase();
+  let users = await db.collection("users").find({}).toArray();
+  res.status(200).json(users);
+};
+export default handler;
