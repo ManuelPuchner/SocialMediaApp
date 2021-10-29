@@ -5,11 +5,13 @@ module.exports = {
     extend: {
       gridTemplateRows: {
         layout: "auto 1fr auto"
-      }
+      },
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      transform: ['active']
+    },
   },
   plugins: [],
 };

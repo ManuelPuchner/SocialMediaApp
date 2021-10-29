@@ -18,6 +18,7 @@ const FormSubmit = ({ ...props }) => {
         focus:outline-none
         hover:shadow-lg
         hover:-translate-y-0.5
+        active:transform-none
         mt-2
       "
     />
