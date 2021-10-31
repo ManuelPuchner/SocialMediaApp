@@ -1,16 +1,19 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useRouter } from "next/router";
+import { LoggedInContext } from "pages/_app";
 import {
   FormInput,
   FormLabel,
   FormSubmit,
   FormHeader,
 } from "components/Layout/FormComponents";
+import Cookies from "js-cookie";
 
 const Index = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState({});
+  const [isLoggedIn, setIsLoggedIn] = useContext(LoggedInContext);
 
   const router = useRouter();
 
@@ -33,7 +36,8 @@ const Index = () => {
     if (result.status == "ok") {
       // Make sure we're in the browser
       if (typeof window !== "undefined") {
-        sessionStorage.setItem("token", result.token)
+        Cookies.set("token", result.token, { expires: 3 });
+        setIsLoggedIn(true);
         router.push(`/${username}`);
       }
     } else {
@@ -76,7 +80,7 @@ const Index = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <FormSubmit type="submit" value="Login" />
+        <FormSubmit value="Login" />
 
         {status.error && (
           <div

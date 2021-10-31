@@ -22,7 +22,6 @@ export default async function handler(req, res) {
 
     const token = jwt.sign({ username: username }, process.env.JWT_SECRET_KEY);
 
-    console.log(token);
     res.status(200).json({ status: "ok", token: token });
   }
 }

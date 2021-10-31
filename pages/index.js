@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <div>
       <button onClick={test}>test</button>
-        <div>{JSON.stringify(users)}</div>
+      <div>{JSON.stringify(users)}</div>
     </div>
   );
 }

@@ -1,11 +1,10 @@
 const FormHeader = ({ ...props }) => {
-  return <h3 {...props} className="text-2xl font-semibold"></h3>;
+  return <h3 className="text-2xl font-semibold" {...props}></h3>;
 };
 
 const FormSubmit = ({ ...props }) => {
   return (
     <input
-      {...props}
       className="
         bg-transparent 
         rounded-sm 
@@ -21,18 +20,19 @@ const FormSubmit = ({ ...props }) => {
         active:transform-none
         mt-2
       "
+      type="submit"
+      {...props}
     />
   );
 };
 
 const FormLabel = ({ ...props }) => {
-  return <label {...props} className="mb-1.5 mt-1"></label>;
+  return <label className="mb-1.5 mt-1" {...props}></label>;
 };
 
 const FormInput = ({ ...props }) => {
   return (
     <input
-      {...props}
       className="
         bg-transparent 
         rounded-sm 
@@ -46,7 +46,10 @@ const FormInput = ({ ...props }) => {
         focus:shadow-lg
         focus:-translate-y-0.5
         mb-3
+        placeholder-opacity-75
+        placeholder-black
       "
+      {...props}
       required
     />
   );
