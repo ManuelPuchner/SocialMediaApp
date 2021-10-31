@@ -30,7 +30,14 @@ const User = (props) => {
           <h3 className="username">
             Username: {props.user_information.username}
           </h3>
-          <p>Quote: {quote}</p>
+          <p>
+            Quote:{" "}
+            {quote
+              ? quote
+              : props.user_information.quote
+              ? props.user_information.quote
+              : "No Quote Found"}
+          </p>
           {props.user_information.isOwner && (
             <div className="owner-specific">
               <form onSubmit={sendNewQuote}>
@@ -74,7 +81,7 @@ import { connectToDatabase } from "lib/mongodb";
 export async function getServerSideProps(ctx) {
   let cookieToken;
   try {
-    cookieToken = ctx.req.headers.cookie.replace("token=", "").split(";")[0];
+    cookieToken = ctx.req.cookies.token;
   } catch {}
 
   let req_user = ctx.query.user;
@@ -82,14 +89,18 @@ export async function getServerSideProps(ctx) {
   let user = await db.collection("users").findOne({ username: req_user });
 
   if (user) {
-    let isOwner =
-      user.username ===
-      jwt.verify(cookieToken, process.env.JWT_SECRET_KEY).username;
+    let isOwner = false;
+    if (cookieToken) {
+      isOwner =
+        user.username ===
+        jwt.verify(cookieToken, process.env.JWT_SECRET_KEY).username;
+    }
     return {
       props: {
         status: "ok",
         user_information: {
           username: user.username,
+          quote: user.quote || null,
           isOwner: isOwner,
         },
       },
