@@ -63,7 +63,8 @@ const Index = () => {
           bg-white 
           bg-opacity-40 
           backdrop-filter 
-          backdrop-blur-md"
+          backdrop-blur-md
+        "
       >
         <FormHeader>Login</FormHeader>
         <FormLabel>Username</FormLabel>
