@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import { useRouter } from "next/router";
-import { LoggedInContext } from "pages/_app";
+import { LoggedInContext } from "contextStores";
 import {
   FormInput,
   FormLabel,

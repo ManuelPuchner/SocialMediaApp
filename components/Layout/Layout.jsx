@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LoggedInContext } from "pages/_app";
+import { LoggedInContext } from "contextStores";
 import { useContext } from "react";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
