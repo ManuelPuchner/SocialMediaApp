@@ -36,7 +36,7 @@ function NotLoggedInComponent() {
               mx-1
               bg-white
               rounded-md
-              bg-opacity-50
+              bg-opacity-60
             "
           >
             Create an account
@@ -51,7 +51,7 @@ function NotLoggedInComponent() {
               mx-1
               bg-white
               rounded-md
-              bg-opacity-50
+              bg-opacity-40
             "
           >
             Login with your account
