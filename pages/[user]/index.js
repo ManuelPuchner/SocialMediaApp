@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from "react";
 import jwt from "jsonwebtoken";
-import { FormInput, FormSubmit } from "components/Layout/FormComponents";
+import { FormInput, FormSubmit } from "components/FormComponents";
 const User = (props) => {
   const [quote, setQuote] = useState("");
   const [newQuote, setNewQuote] = useState("");

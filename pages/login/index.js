@@ -6,7 +6,7 @@ import {
   FormLabel,
   FormSubmit,
   FormHeader,
-} from "components/Layout/FormComponents";
+} from "components/FormComponents";
 import Cookies from "js-cookie";
 
 const Index = () => {

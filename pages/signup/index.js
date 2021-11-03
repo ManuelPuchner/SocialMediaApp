@@ -5,7 +5,7 @@ import {
   FormLabel,
   FormSubmit,
   FormHeader,
-} from "components/Layout/FormComponents";
+} from "components/FormComponents";
 
 const Index = () => {
   const router = useRouter();

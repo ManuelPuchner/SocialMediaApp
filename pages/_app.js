@@ -1,4 +1,4 @@
-import Layout from "components/Layout/Layout";
+import Layout from "components/Layout";
 import "../styles/globals.css";
 import "tailwindcss/tailwind.css";
 import Cookies from "js-cookie";
