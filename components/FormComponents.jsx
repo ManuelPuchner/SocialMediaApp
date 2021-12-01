@@ -2,6 +2,31 @@ const FormHeader = ({ ...props }) => {
   return <h3 className="text-2xl font-semibold" {...props}></h3>;
 };
 
+const FormTextarea = ({ ...props }) => {
+  return (
+    <textarea
+      className="form-textarea
+        bg-transparent 
+        rounded-sm 
+        ring-black 
+        ring-2
+        px-2
+        py-1.5
+        transition
+        transform
+        focus:outline-none
+        focus:shadow-lg
+        focus:-translate-y-0.5
+        mb-3
+        placeholder-opacity-75
+        placeholder-black
+        h-1/2
+      "
+      {...props}
+    ></textarea>
+  );
+};
+
 const FormSubmit = ({ ...props }) => {
   return (
     <input
@@ -55,4 +80,4 @@ const FormInput = ({ ...props }) => {
   );
 };
 
-export { FormSubmit, FormInput, FormLabel, FormHeader };
+export { FormSubmit, FormInput, FormLabel, FormHeader, FormTextarea };

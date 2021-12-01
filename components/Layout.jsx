@@ -69,7 +69,7 @@ const Layout = ({ children }) => {
       <main>{children}</main>
       <footer>footer</footer>
       {/* static stuff */}
-      <CreatePostSection show={showCreateNewPostSection} />
+      <CreatePostSection show={showCreateNewPostSection} setShow={setShowCreateNewPostSection}/>
     </div>
   );
 };

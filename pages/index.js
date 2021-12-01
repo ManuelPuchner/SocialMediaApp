@@ -1,17 +1,62 @@
 import { useState, useContext } from "react";
 import { LoggedInContext } from "contextStores";
 import Link from "next/link";
-export default function Home() {
-  const [isLoggedIn, setIsLoggedIn] = useContext(LoggedInContext);
+import jwt from "jsonwebtoken";
+import { connectToDatabase } from "lib/mongodb";
+import PostCard from "components/PostCard";
 
+export default function Home({data}) {
+  const [isLoggedIn, setIsLoggedIn] = useContext(LoggedInContext);
   return (
-    <div>{isLoggedIn ? <LoggedInComponent /> : <NotLoggedInComponent />}</div>
+    <div>
+      {isLoggedIn ? (
+        <LoggedInComponent  data={data}/>
+      ) : (
+        <NotLoggedInComponent />
+      )}
+    </div>
   );
 }
 
-function LoggedInComponent() {
-  return <></>;
+function LoggedInComponent({data}) {
+  console.log(data)
+  return (
+    <div>
+      {data && (
+        <div className="">
+          {data.map((post, index) => (
+            <PostCard key={index} post={post} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
+
+export const getServerSideProps = async (ctx) => {
+  const { token } = ctx.req.cookies;
+  const user = jwt.verify(token, process.env.JWT_SECRET_KEY);
+  let { db } = await connectToDatabase();
+  let posts = await db
+    .collection("posts")
+    .find({}, {'_id': false})
+    .sort({ createdAt: -1 })
+    .limit(20)
+    .toArray();
+
+  posts = JSON.parse(JSON.stringify(posts));
+  if (!user) {
+    return {
+      status: 401,
+      message: "Unauthorized",
+    };
+  }
+  return {
+    props: {
+      data: posts
+    },
+  };
+};
 
 function NotLoggedInComponent() {
   return (

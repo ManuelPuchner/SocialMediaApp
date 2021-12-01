@@ -2,13 +2,37 @@ import { useState } from "react";
 
 import Loader from "./Loader";
 import PostTypeSelectorButton from "components/PostTypeSelectorButton";
+import Post from "./Post";
 
-const CreatePostSection = ({ show }) => {
+const CreatePostSection = ({ show, setShow }) => {
   const [postType, setPostType] = useState("text");
   const [isPublishing, setIsPublishing] = useState(false);
-
+  const [post, setPost] = useState({});
+  function setPostTypeWrapper(type) {
+    setPost({});
+    setPostType(type);
+  }
   async function publishPost() {
-    setIsPublishing(!isPublishing);
+    if (!isPublishing) {
+      setIsPublishing(true);
+      if (!isPublishing) {
+        console.log(post);
+      }
+      const result = await fetch("/api/createPost/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(post),
+      });
+      const data = await result.json();
+
+      if ((data.status = "ok")) {
+        setPost({});
+        setShow(false);
+      }
+      setIsPublishing(false);
+    }
   }
   return (
     <>
@@ -23,42 +47,42 @@ const CreatePostSection = ({ show }) => {
       >
         <Loader isPublishing={isPublishing} />
         <div
-          className={`content ${
+          className={`content h-full ${
             isPublishing ? "opacity-40 pointer-events-none" : ""
           }`}
         >
           <h3 className="text-xl font-medium m-3">Create a new Post</h3>
-          <div className="post-selection">
+          <div className="post-selection h-full">
             <h4 className="post-selection__header mx-3">
               Select the type of post you want to make
             </h4>
             <div className="post-type-selector-wrapper flex justify-center">
               <PostTypeSelectorButton
-                onClick={() => setPostType("text")}
+                onClick={() => setPostTypeWrapper("text")}
                 isSelected={postType == "text"}
               >
                 Text
               </PostTypeSelectorButton>
               <PostTypeSelectorButton
-                onClick={() => setPostType("image")}
+                onClick={() => setPostTypeWrapper("image")}
                 isSelected={postType == "image"}
               >
                 Image
               </PostTypeSelectorButton>
               <PostTypeSelectorButton
-                onClick={() => setPostType("video")}
+                onClick={() => setPostTypeWrapper("video")}
                 isSelected={postType == "video"}
               >
                 Video
               </PostTypeSelectorButton>
               <PostTypeSelectorButton
-                onClick={() => setPostType("gif")}
+                onClick={() => setPostTypeWrapper("gif")}
                 isSelected={postType == "gif"}
               >
                 Gif
               </PostTypeSelectorButton>
             </div>
-            {postType}
+            <Post type={postType} setPost={setPost} />
           </div>
         </div>
 
