@@ -1,7 +1,6 @@
 import { useState, useContext } from "react";
 import { LoggedInContext } from "contextStores";
 import Link from "next/link";
-import jwt from "jsonwebtoken";
 import { connectToDatabase } from "lib/mongodb";
 import PostCard from "components/PostCard";
 
@@ -10,7 +9,7 @@ export default function Home({data}) {
   return (
     <div>
       {isLoggedIn ? (
-        <LoggedInComponent  data={data}/>
+        <LoggedInComponent data={data}/>
       ) : (
         <NotLoggedInComponent />
       )}
@@ -19,12 +18,11 @@ export default function Home({data}) {
 }
 
 function LoggedInComponent({data}) {
-  console.log(data)
   return (
     <div>
       {data && (
         <div className="">
-          {data.map((post, index) => (
+          {data.posts.map((post, index) => (
             <PostCard key={index} post={post} />
           ))}
         </div>
@@ -32,14 +30,18 @@ function LoggedInComponent({data}) {
     </div>
   );
 }
-
+import jwt from "jsonwebtoken";
 export const getServerSideProps = async (ctx) => {
   const { token } = ctx.req.cookies;
-  const user = jwt.verify(token, process.env.JWT_SECRET_KEY);
+  let user;
+  if(token){
+    user = jwt.verify(token, process.env.JWT_SECRET_KEY);
+  }
+  
   let { db } = await connectToDatabase();
   let posts = await db
     .collection("posts")
-    .find({}, {'_id': false})
+    .find({})
     .sort({ createdAt: -1 })
     .limit(20)
     .toArray();
@@ -47,13 +49,17 @@ export const getServerSideProps = async (ctx) => {
   posts = JSON.parse(JSON.stringify(posts));
   if (!user) {
     return {
-      status: 401,
-      message: "Unauthorized",
+      props: {
+        status: 401,
+        message: "Unauthorized",
+      },
     };
   }
   return {
     props: {
-      data: posts
+      data: {
+        posts,
+      }
     },
   };
 };
