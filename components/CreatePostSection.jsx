@@ -15,9 +15,6 @@ const CreatePostSection = ({ show, setShow }) => {
   async function publishPost() {
     if (!isPublishing) {
       setIsPublishing(true);
-      if (!isPublishing) {
-        console.log(post);
-      }
       const result = await fetch("/api/createPost/", {
         method: "POST",
         headers: {

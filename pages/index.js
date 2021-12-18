@@ -4,12 +4,12 @@ import Link from "next/link";
 import { connectToDatabase } from "lib/mongodb";
 import PostCard from "components/PostCard";
 
-export default function Home({data}) {
+export default function Home({ data }) {
   const [isLoggedIn, setIsLoggedIn] = useContext(LoggedInContext);
   return (
     <div>
       {isLoggedIn ? (
-        <LoggedInComponent data={data}/>
+        <LoggedInComponent data={data} />
       ) : (
         <NotLoggedInComponent />
       )}
@@ -17,7 +17,7 @@ export default function Home({data}) {
   );
 }
 
-function LoggedInComponent({data}) {
+function LoggedInComponent({ data }) {
   return (
     <div>
       {data && (
@@ -34,10 +34,10 @@ import jwt from "jsonwebtoken";
 export const getServerSideProps = async (ctx) => {
   const { token } = ctx.req.cookies;
   let user;
-  if(token){
+  if (token) {
     user = jwt.verify(token, process.env.JWT_SECRET_KEY);
   }
-  
+
   let { db } = await connectToDatabase();
   let posts = await db
     .collection("posts")
@@ -59,7 +59,7 @@ export const getServerSideProps = async (ctx) => {
     props: {
       data: {
         posts,
-      }
+      },
     },
   };
 };

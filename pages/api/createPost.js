@@ -22,13 +22,14 @@ export default async function handler(req, res) {
         message: "User not found",
       });
     }
-    if(!req.body.title || !req.body.content) {
+    if (!req.body.title || !req.body.content) {
       return res.status(400).json({
         status: "error",
         message: "Title and content are required",
       });
     }
     let post = await posts.insertOne({
+      createdAt: new Date(),
       account: {
         username: dbUser.username,
       },
