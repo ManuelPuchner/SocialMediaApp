@@ -22,17 +22,8 @@ const Row = ({ children, height50 }) => {
 const TextPost = ({ setPost }) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  function handleChange() {
-    let post = {
-      type: "text",
-      title,
-      content,
-    };
-    setPost(post);
-  }
   function handleSubmit(e) {
     e.preventDefault();
-    
   }
   return (
     <div className="text-post-input h-full">
@@ -45,7 +36,11 @@ const TextPost = ({ setPost }) => {
             value={title}
             onChange={(e) => {
               setTitle(e.target.value);
-              handleChange();
+              setPost({
+                type: "text",
+                title: e.target.value,
+                content,
+              });
             }}
           />
         </Row>
@@ -57,7 +52,11 @@ const TextPost = ({ setPost }) => {
             value={content}
             onChange={(e) => {
               setContent(e.target.value);
-              handleChange();
+              setPost({
+                type: "text",
+                title,
+                content: e.target.value,
+              });
             }}
           />
         </Row>
