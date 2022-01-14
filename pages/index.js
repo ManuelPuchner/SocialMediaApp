@@ -1,11 +1,11 @@
-import { useState, useContext } from "react";
+import { useState, useContext, createContext } from "react";
 import { LoggedInContext } from "contextStores";
 import Link from "next/link";
 import { connectToDatabase } from "lib/mongodb";
 import PostCard from "components/PostCard";
 
 export default function Home({ data }) {
-  const [isLoggedIn, setIsLoggedIn] = useContext(LoggedInContext);
+  const [isLoggedIn] = useContext(LoggedInContext);
   return (
     <div>
       {isLoggedIn ? (

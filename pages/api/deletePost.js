@@ -2,7 +2,7 @@ import { connectToDatabase } from "lib/mongodb";
 import jwt from "jsonwebtoken";
 import { ObjectId } from "mongodb";
 export default async function handler(req, res) {
-  if(req.method == "DELETE") {
+  if (req.method == "DELETE") {
     const { token } = req.cookies;
     let user;
     if (token) {
@@ -22,10 +22,21 @@ export default async function handler(req, res) {
     const { db } = await connectToDatabase();
     const posts = await db.collection("posts");
 
+    const post = await posts.findOne({});
+    if (user.username !== post.account.user)
+      return res
+        .status(401)
+        .json({ status: "error", message: "Not Authorized!" });
 
     let result = await posts.deleteOne({ _id: new ObjectId(id) });
-    if(result.deletedCount == 0) return res.status(400).json({ status: "error", message: "Post not found" });
-    if(result.deletedCount > 1) return res.status(400).json({ status: "error", message: "Multiple posts found" });
+    if (result.deletedCount == 0)
+      return res
+        .status(400)
+        .json({ status: "error", message: "Post not found" });
+    if (result.deletedCount > 1)
+      return res
+        .status(400)
+        .json({ status: "error", message: "Multiple posts found" });
 
     return res.status(200).json({ status: "success", message: "Post deleted" });
   }

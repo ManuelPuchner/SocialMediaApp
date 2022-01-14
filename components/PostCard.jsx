@@ -1,6 +1,20 @@
-import DropdownButton from "./DropdownButton";
+import { useEffect, useState } from "react";
 
+import jwt from "jsonwebtoken";
+import Cookies from "js-cookie";
+import DropdownButton from "./DropdownButton";
 const PostCard = ({ post }) => {
+  const [isCreator, setIsCreator] = useState(false);
+
+  useEffect(() => {
+    const token = Cookies.get("token");
+    if (token) {
+      const decoded = jwt.decode(token);
+      if (decoded.username === post.account.username) {
+        setIsCreator(true);
+      }
+    }
+  }, [post.account.username]);
   return (
     <div
       className="
@@ -48,20 +62,24 @@ const PostCard = ({ post }) => {
         </div>
         <div className="right flex items-center">
           <DropdownButton
-            content={[
-              // {
-              //   type: "button",
-              //   action: "edit",
-              //   href: "",
-              //   text: "Edit"
-              // },
-              {
-                type: "button",
-                action: "delete",
-                href: "",
-                text: "Delete"
-              }
-            ]}
+            content={
+              isCreator
+                ? [
+                    // {
+                    //   type: "button",
+                    //   action: "edit",
+                    //   href: "",
+                    //   text: "Edit"
+                    // },
+                    {
+                      type: "button",
+                      action: "delete",
+                      href: "",
+                      text: "Delete",
+                    },
+                  ]
+                : []
+            }
             post={post}
           />
         </div>
