@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/router";
 import Router from "next/router";
 
 function DropdownButton({ content, post }) {
@@ -23,7 +24,7 @@ function DropdownButton({ content, post }) {
 
   const deletePost = async () => {
     console.log("delete");
-    const result = await fetch(`/api/deletePost?id=${post._id}`, {
+    const result = await fetch(`${router.basePath}/api/deletePost?id=${post._id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

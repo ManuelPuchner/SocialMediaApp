@@ -20,7 +20,7 @@ const Index = () => {
   async function submit(e) {
     e.preventDefault();
 
-    const promise = await fetch("/api/auth/login", {
+    const promise = await fetch(`${router.basePath}/api/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

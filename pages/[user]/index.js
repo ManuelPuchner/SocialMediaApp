@@ -1,13 +1,15 @@
 /* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import jwt from "jsonwebtoken";
 import { FormInput, FormSubmit } from "components/FormComponents";
 const User = (props) => {
   const [quote, setQuote] = useState("");
   const [newQuote, setNewQuote] = useState("");
+  const router = useRouter();
   async function sendNewQuote(e) {
     e.preventDefault();
-    const promise = await fetch("/api/setQuote", {
+    const promise = await fetch(`${router.basePath}/api/setQuote`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

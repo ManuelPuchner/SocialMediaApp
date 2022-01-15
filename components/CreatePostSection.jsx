@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import { useRouter } from "next/router";
 import Loader from "./Loader";
 import PostTypeSelectorButton from "components/PostTypeSelectorButton";
 import Post from "./Post";
@@ -15,7 +15,7 @@ const CreatePostSection = ({ show, setShow }) => {
   async function publishPost() {
     if (!isPublishing) {
       setIsPublishing(true);
-      const result = await fetch("/api/createPost/", {
+      const result = await fetch(`${router.basePath}/api/createPost/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
