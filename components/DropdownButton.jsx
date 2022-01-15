@@ -22,6 +22,8 @@ function DropdownButton({ content, post }) {
     }
   }
 
+  const router = useRouter()
+
   const deletePost = async () => {
     console.log("delete");
     const result = await fetch(`${router.basePath}/api/deletePost?id=${post._id}`, {

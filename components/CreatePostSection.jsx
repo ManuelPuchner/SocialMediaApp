@@ -12,6 +12,7 @@ const CreatePostSection = ({ show, setShow }) => {
     setPost({});
     setPostType(type);
   }
+  const router = useRouter();
   async function publishPost() {
     if (!isPublishing) {
       setIsPublishing(true);
