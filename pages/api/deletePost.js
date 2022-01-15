@@ -23,7 +23,7 @@ export default async function handler(req, res) {
     const posts = await db.collection("posts");
 
     const post = await posts.findOne({});
-    if (user.username !== post.account.user)
+    if (user.username !== post.account.username)
       return res
         .status(401)
         .json({ status: "error", message: "Not Authorized!" });
