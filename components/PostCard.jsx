@@ -62,29 +62,30 @@ const PostCard = ({ post }) => {
             </a>
           </div>
         </div>
-        <div className="right flex items-center">
-          <DropdownButton
-            content={
-              isCreator
-                ? [
-                    // {
-                    //   type: "button",
-                    //   action: "edit",
-                    //   href: "",
-                    //   text: "Edit"
-                    // },
-                    {
-                      type: "button",
-                      action: "delete",
-                      href: "",
-                      text: "Delete",
-                    },
-                  ]
-                : []
-            }
-            post={post}
-          />
-        </div>
+        {
+          isCreator ?
+            <div className="right flex items-center">
+              <DropdownButton
+                content={[
+                      // {
+                      //   type: "button",
+                      //   action: "edit",
+                      //   href: "",
+                      //   text: "Edit"
+                      // },
+                      {
+                        type: "button",
+                        action: "delete",
+                        href: "",
+                        text: "Delete",
+                      },
+                    ]
+                }
+                post={post}
+              />
+            </div>
+            : ""
+        }
       </div>
       <h4 className="title">{post.title}</h4>
       <div className="content">
