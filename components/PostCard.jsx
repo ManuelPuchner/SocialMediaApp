@@ -87,7 +87,11 @@ const PostCard = ({ post }) => {
         </div>
       </div>
       <h4 className="title">{post.title}</h4>
-      <div className="content">{JSON.stringify(post.content)}</div>
+      <div className="content">
+        {post.content.split("\n").map((item, index) => (
+          <p key={index}>{item}</p>
+        ))}
+      </div>
     </div>
   );
 };
