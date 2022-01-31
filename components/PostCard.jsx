@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-
+import { useRouter } from "next/router";
 import jwt from "jsonwebtoken";
 import Cookies from "js-cookie";
 import DropdownButton from "./DropdownButton";
 const PostCard = ({ post }) => {
   const [isCreator, setIsCreator] = useState(false);
-
+  const router = useRouter();
   useEffect(() => {
     const token = Cookies.get("token");
     if (token) {
@@ -55,7 +55,7 @@ const PostCard = ({ post }) => {
             />
           </div>
           <div className="postcard__header__info">
-            <a href={`/${post.account.username}`}>
+            <a href={`${router.basePath}/${post.account.username}`}>
               <div className="postcard__header__info__name">
                 {post.account.username}
               </div>
