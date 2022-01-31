@@ -55,9 +55,11 @@ const PostCard = ({ post }) => {
             />
           </div>
           <div className="postcard__header__info">
-            <div className="postcard__header__info__name">
-              {post.account.username}
-            </div>
+            <a href={`/${post.account.username}`}>
+              <div className="postcard__header__info__name">
+                {post.account.username}
+              </div>
+            </a>
           </div>
         </div>
         <div className="right flex items-center">
