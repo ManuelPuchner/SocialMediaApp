@@ -1,8 +1,18 @@
-import { connectToDatabase } from "lib/mongodb";
+import prisma from "lib/prisma";
 
 const handler = async (req, res) => {
-  let { db } = await connectToDatabase();
-  let users = await db.collection("users").find({}).toArray();
-  res.status(200).json(users);
+  let dbUser = await prisma.user.findUnique({
+    where: {
+      name: "Manuel2",
+    },
+  });
+  if (!dbUser) {
+    return res.status(404).json({
+      status: "error",
+      message: "User not found",
+      code: "user_not_found",
+    });
+  }
+  res.status(200).json(dbUser);
 };
 export default handler;

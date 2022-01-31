@@ -6,15 +6,16 @@ import DropdownButton from "./DropdownButton";
 const PostCard = ({ post }) => {
   const [isCreator, setIsCreator] = useState(false);
   const router = useRouter();
+  console.log(post);
   useEffect(() => {
     const token = Cookies.get("token");
     if (token) {
       const decoded = jwt.decode(token);
-      if (decoded.username === post.account.username) {
+      if (decoded.user.name === post.authorName) {
         setIsCreator(true);
       }
     }
-  }, [post.account.username]);
+  }, [post.authorName]);
   return (
     <div
       className="
@@ -49,41 +50,39 @@ const PostCard = ({ post }) => {
           >
             {/* <img src={post.account.profilePicture} alt="post" /> */}
             <img
-              src={`https://eu.ui-avatars.com/api/?name=${post.account.username}`}
+              src={`https://eu.ui-avatars.com/api/?name=${post.authorName}`}
               alt=""
               className="rounded-full"
             />
           </div>
           <div className="postcard__header__info">
-            <a href={`${router.basePath}/${post.account.username}`}>
+            <a href={`${router.basePath}/${post.authorName}`}>
               <div className="postcard__header__info__name">
-                {post.account.username}
+                {post.authorName}
               </div>
             </a>
           </div>
         </div>
         <div className="right flex items-center">
-          <DropdownButton
-            content={
-              isCreator
-                ? [
-                    // {
-                    //   type: "button",
-                    //   action: "edit",
-                    //   href: "",
-                    //   text: "Edit"
-                    // },
-                    {
-                      type: "button",
-                      action: "delete",
-                      href: "",
-                      text: "Delete",
-                    },
-                  ]
-                : []
-            }
-            post={post}
-          />
+          {isCreator && (
+            <DropdownButton
+              content={[
+                // {
+                //   type: "button",
+                //   action: "edit",
+                //   href: "",
+                //   text: "Edit"
+                // },
+                {
+                  type: "button",
+                  action: "delete",
+                  href: "",
+                  text: "Delete",
+                },
+              ]}
+              post={post}
+            />
+          )}
         </div>
       </div>
       <h4 className="title">{post.title}</h4>
