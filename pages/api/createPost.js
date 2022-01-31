@@ -20,14 +20,30 @@ export default async function handler(req, res) {
       return res.status(404).json({
         status: "error",
         message: "User not found",
+        code: "user_not_found"
       });
     }
     if (!req.body.title || !req.body.content) {
       return res.status(400).json({
         status: "error",
         message: "Title and content are required",
+        code: "title_or_content_missing"
       });
     }
+    if (req.body.title.length > 100 || req.body.content.length > 1000) {
+      return res.status(400).json({
+        status: "error",
+        message: "Title and content must be less than 100 and 1000 characters",
+        code: "title_or_content_too_long",
+      });
+    }
+
+    // strip away unwanted characters
+    let content = req.body.content
+      .replace(/<script>/g, "")
+      .replace(/<\/script>/g, "")
+      .replace(/[\n\r]{2,}/g, "\n");
+
     let post = await posts.insertOne({
       createdAt: new Date(),
       account: {
@@ -35,7 +51,7 @@ export default async function handler(req, res) {
       },
       type: req.body.type,
       title: req.body.title,
-      content: req.body.content,
+      content: content
     });
     if (!post) {
       return res.status(500).json({
