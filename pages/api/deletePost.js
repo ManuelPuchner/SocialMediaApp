@@ -27,6 +27,12 @@ export default async function handler(req, res) {
       },
     });
 
+    const dbUser = await prisma.user.findUnique({
+      where: {
+        name: user.user.name,
+      },
+    });
+
     if (user.user.name !== post.authorName)
       return res
         .status(401)
@@ -35,6 +41,18 @@ export default async function handler(req, res) {
     let result = await prisma.post.delete({
       where: {
         id,
+      },
+    });
+
+    // remove post from user's posts
+    await prisma.user.update({
+      where: {
+        name: user.user.name,
+      },
+      data: {
+        postIds: {
+          set: dbUser.postIds.filter((id) => id !== post.id),
+        },
       },
     });
 

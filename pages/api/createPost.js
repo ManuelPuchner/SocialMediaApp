@@ -14,21 +14,21 @@ export default async function handler(req, res) {
     let dbUser = await prisma.user.findUnique({
       where: {
         name: user.user.name,
-      }
+      },
     });
 
     if (!dbUser) {
       return res.status(404).json({
         status: "error",
         message: "User not found",
-        code: "user_not_found"
+        code: "user_not_found",
       });
     }
     if (!req.body.title || !req.body.content) {
       return res.status(400).json({
         status: "error",
         message: "Title and content are required",
-        code: "title_or_content_missing"
+        code: "title_or_content_missing",
       });
     }
     if (req.body.title.length > 100 || req.body.content.length > 1000) {
@@ -50,24 +50,12 @@ export default async function handler(req, res) {
         author: {
           connect: {
             name: dbUser.name,
-          }
+          },
         },
         type: req.body.type,
         title: req.body.title,
         content,
-      }
-    });
-    let dbUserPosts = await prisma.user.update({
-      where: {
-        id: dbUser.id,
       },
-      data: {
-        posts: {
-          connect: {
-            id: post.id,
-          }
-        }  
-      }
     });
 
     if (!post) {
