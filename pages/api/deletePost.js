@@ -1,6 +1,6 @@
-import { connectToDatabase } from "lib/mongodb";
+import prisma from "lib/prisma";
 import jwt from "jsonwebtoken";
-import { ObjectId } from "mongodb";
+
 export default async function handler(req, res) {
   if (req.method == "DELETE") {
     const { token } = req.cookies;
@@ -15,29 +15,37 @@ export default async function handler(req, res) {
       });
     }
 
-    const { id } = req.query;
+    let { id } = req.query;
     if (!id)
       return res.status(400).json({ status: "error", message: "Missing id" });
 
-    const { db } = await connectToDatabase();
-    const posts = await db.collection("posts");
+    id = Number(id);
 
-    const post = await posts.findOne({});
-    if (user.username !== post.account.username)
+    const post = await prisma.post.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (user.user.name !== post.authorName)
       return res
         .status(401)
         .json({ status: "error", message: "Not Authorized!" });
 
-    let result = await posts.deleteOne({ _id: new ObjectId(id) });
-    if (result.deletedCount == 0)
+    let result = await prisma.post.delete({
+      where: {
+        id,
+      },
+    });
+
+    if (result) {
+      return res
+        .status(200)
+        .json({ status: "success", message: "Post deleted" });
+    } else {
       return res
         .status(400)
         .json({ status: "error", message: "Post not found" });
-    if (result.deletedCount > 1)
-      return res
-        .status(400)
-        .json({ status: "error", message: "Multiple posts found" });
-
-    return res.status(200).json({ status: "success", message: "Post deleted" });
+    }
   }
 }

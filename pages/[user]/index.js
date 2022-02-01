@@ -115,7 +115,7 @@ const User = (props) => {
   );
 };
 
-import { connectToDatabase } from "lib/mongodb";
+import prisma from "lib/prisma";
 
 export async function getServerSideProps(ctx) {
   let cookieToken;
@@ -124,22 +124,26 @@ export async function getServerSideProps(ctx) {
   } catch {}
 
   let req_user = ctx.query.user;
-  const { db } = await connectToDatabase();
-  let user = await db.collection("users").findOne({ username: req_user });
+  
+  let user = await prisma.user.findUnique({
+    where: {
+      name: req_user,
+    },
+  });
 
   if (user) {
     let isOwner = false;
     if (cookieToken) {
       isOwner =
-        user.username ===
-        jwt.verify(cookieToken, process.env.JWT_SECRET_KEY).username;
+        user.name ===
+        jwt.verify(cookieToken, process.env.JWT_SECRET_KEY).user.name;
     }
     return {
       props: {
         status: "ok",
         user_information: {
-          username: user.username,
-          quote: user.quote || null,
+          username: user.name,
+          quote: user.bio || null,
           isOwner: isOwner,
         },
       },

@@ -59,7 +59,7 @@ const Layout = ({ children }) => {
               <button onClick={logout} className="mx-1.5">
                 Logout
               </button>
-              <Link href={`/${jwt.decode(Cookies.get("token")).username}`}>
+              <Link href={`/${jwt.decode(Cookies.get("token")).user.name}`}>
                 <a className="mx-1.5">My Profile</a>
               </Link>
             </>

@@ -1,7 +1,6 @@
 import { useState, useContext, createContext } from "react";
 import { LoggedInContext } from "contextStores";
 import Link from "next/link";
-import { connectToDatabase } from "lib/mongodb";
 import PostCard from "components/PostCard";
 
 export default function Home({ data }) {
@@ -31,6 +30,7 @@ function LoggedInComponent({ data }) {
   );
 }
 import jwt from "jsonwebtoken";
+import prisma from "lib/prisma";
 export const getServerSideProps = async (ctx) => {
   const { token } = ctx.req.cookies;
   let user;
@@ -38,14 +38,11 @@ export const getServerSideProps = async (ctx) => {
     user = jwt.verify(token, process.env.JWT_SECRET_KEY);
   }
 
-  let { db } = await connectToDatabase();
-  let posts = await db
-    .collection("posts")
-    .find({})
-    .sort({ createdAt: -1 })
-    .limit(20)
-    .toArray();
-
+  let posts = await prisma.post.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
   posts = JSON.parse(JSON.stringify(posts));
   if (!user) {
     return {

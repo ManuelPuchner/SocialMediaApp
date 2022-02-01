@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { connectToDatabase } from "lib/mongodb";
+import prisma from "lib/prisma";
 export default async function handler(req, res) {
   if (req.method === "POST") {
     const token = req.cookies.token;
@@ -11,11 +11,12 @@ export default async function handler(req, res) {
       });
     }
 
-    let { db } = await connectToDatabase();
-    let posts = await db.collection("posts");
-    let dbUser = await db
-      .collection("users")
-      .findOne({ username: user.username });
+    let dbUser = await prisma.user.findUnique({
+      where: {
+        name: user.user.name,
+      }
+    });
+
     if (!dbUser) {
       return res.status(404).json({
         status: "error",
@@ -44,15 +45,31 @@ export default async function handler(req, res) {
       .replace(/<\/script>/g, "")
       .replace(/[\n\r]{2,}/g, "\n");
 
-    let post = await posts.insertOne({
-      createdAt: new Date(),
-      account: {
-        username: dbUser.username,
-      },
-      type: req.body.type,
-      title: req.body.title,
-      content: content
+    let post = await prisma.post.create({
+      data: {
+        author: {
+          connect: {
+            name: dbUser.name,
+          }
+        },
+        type: req.body.type,
+        title: req.body.title,
+        content,
+      }
     });
+    let dbUserPosts = await prisma.user.update({
+      where: {
+        id: dbUser.id,
+      },
+      data: {
+        posts: {
+          connect: {
+            id: post.id,
+          }
+        }  
+      }
+    });
+
     if (!post) {
       return res.status(500).json({
         status: "error",

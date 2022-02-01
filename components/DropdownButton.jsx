@@ -26,7 +26,7 @@ function DropdownButton({ content, post }) {
 
   const deletePost = async () => {
     console.log("delete");
-    const result = await fetch(`${router.basePath}/api/deletePost?id=${post._id}`, {
+    const result = await fetch(`${router.basePath}/api/deletePost?id=${post.id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
