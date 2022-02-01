@@ -6,7 +6,6 @@ import DropdownButton from "./DropdownButton";
 const PostCard = ({ post }) => {
   const [isCreator, setIsCreator] = useState(false);
   const router = useRouter();
-  console.log(post);
   useEffect(() => {
     const token = Cookies.get("token");
     if (token) {

@@ -38,7 +38,11 @@ export const getServerSideProps = async (ctx) => {
     user = jwt.verify(token, process.env.JWT_SECRET_KEY);
   }
 
-  let posts = await prisma.post.findMany();
+  let posts = await prisma.post.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
   posts = JSON.parse(JSON.stringify(posts));
   if (!user) {
     return {
